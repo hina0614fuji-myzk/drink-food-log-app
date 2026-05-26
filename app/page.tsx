@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 type FoodRecord = {
@@ -9,29 +12,15 @@ type FoodRecord = {
 };
 
 export default function Home() {
-  const records: FoodRecord[] = [
-    {
-      id: 1,
-      date: "2026/05/26",
-      meal: "オートミール、サラダチキン",
-      alcohol: "なし",
-      memo: "夜は軽めにした",
-    },
-    {
-      id: 2,
-      date: "2026/05/25",
-      meal: "焼肉、白ごはん",
-      alcohol: "ビール2杯",
-      memo: "恋人とご飯🍻",
-    },
-    {
-      id: 3,
-      date: "2026/05/24",
-      meal: "炊き込みご飯、味噌汁",
-      alcohol: "ハイボール1杯",
-      memo: "おうちご飯でゆっくり",
-    },
-  ];
+  const [records, setRecords] = useState<FoodRecord[]>([]);
+
+  useEffect(() => {
+    const savedRecords = localStorage.getItem("records");
+
+    if (savedRecords) {
+      setRecords(JSON.parse(savedRecords));
+    }
+  }, []);
 
   return (
     <main className="min-h-screen bg-gray-100 p-6">
