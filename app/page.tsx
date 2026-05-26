@@ -22,6 +22,19 @@ export default function Home() {
     }
   }, []);
 
+  const deleteRecord = (id: number) => {
+    const updatedRecords = records.filter(
+      (record) => record.id !== id
+    );
+
+    setRecords(updatedRecords);
+
+    localStorage.setItem(
+      "records",
+      JSON.stringify(updatedRecords)
+    );
+  };
+
   return (
     <main className="min-h-screen bg-gray-100 p-6">
       <div className="mx-auto max-w-2xl">
@@ -65,6 +78,16 @@ export default function Home() {
                   {record.memo}
                 </p>
               </div>
+
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => deleteRecord(record.id)}
+                  className="rounded-lg bg-red-500 px-3 py-2 text-sm text-white hover:bg-red-600"
+                >
+                  削除
+                </button>
+              </div>
+
             </div>
           ))}
         </div>

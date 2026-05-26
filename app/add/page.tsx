@@ -15,6 +15,12 @@ export default function AddPage() {
     const [isSaving, setIsSaving] = useState(false);
 
     const saveRecord = () => {
+
+        if (!meal.trim()) {
+            alert("食事を入力してください");
+            return;
+        }
+
         setIsSaving(true);
 
         const newRecord = {
