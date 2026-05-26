@@ -79,13 +79,22 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-4 flex justify-end">
+              <div className="mt-4 flex justify-end gap-2">
+
+                <Link
+                  href={`/edit/${record.id}`}
+                  className="rounded-lg bg-yellow-500 px-3 py-2 text-sm text-white hover:bg-yellow-600"
+                >
+                  編集
+                </Link>
+
                 <button
                   onClick={() => deleteRecord(record.id)}
                   className="rounded-lg bg-red-500 px-3 py-2 text-sm text-white hover:bg-red-600"
                 >
                   削除
                 </button>
+
               </div>
 
             </div>
