@@ -21,6 +21,16 @@ export default function Home() {
   const [records, setRecords] = useState<FoodRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const totalCount = records.length;
+
+  const alcoholCount = records.filter(
+    (record) => record.has_alcohol
+  ).length;
+
+  const noAlcoholCount = records.filter(
+    (record) => !record.has_alcohol
+  ).length;
+
   useEffect(() => {
     const fetchRecords = async () => {
       const { data, error } = await supabase
@@ -83,6 +93,24 @@ export default function Home() {
             className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700">
             + 記録追加
           </Link>
+        </div>
+
+        {/* サマリ */}
+        <div className="mb-6 grid grid-cols-3 gap-3">
+          <div className="rounded-xl bg-white p-4 text-center shadow">
+            <p className="text-sm text-gray-500">記録数</p>
+            <p className="mt-1 text-2xl font-bold">{totalCount}</p>
+          </div>
+
+          <div className="rounded-xl bg-white p-4 text-center shadow">
+            <p className="text-sm text-gray-500">飲酒日数</p>
+            <p className="mt-1 text-2xl font-bold">{alcoholCount}</p>
+          </div>
+
+          <div className="rounded-xl bg-white p-4 text-center shadow">
+            <p className="text-sm text-gray-500">禁酒日数</p>
+            <p className="mt-1 text-2xl font-bold">{noAlcoholCount}</p>
+          </div>
         </div>
 
         {/* 記録一覧を表示する */}
