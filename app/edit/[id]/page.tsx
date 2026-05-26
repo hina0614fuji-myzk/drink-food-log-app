@@ -20,6 +20,8 @@ type FoodRecord = {
 export default function EditPage() {
   const params = useParams();
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const id = Number(params.id);
 
@@ -42,8 +44,11 @@ export default function EditPage() {
 
       if (error) {
         alert("データ取得失敗: " + error.message);
+        setIsLoading(false);
         return;
       }
+
+      setIsLoading(false);
 
       setDate(data.date);
       setMeal(data.meal);
@@ -61,10 +66,13 @@ export default function EditPage() {
   }, [id]);
 
   const updateRecord = async () => {
+
     if (!meal.trim()) {
       alert("食事を入力してください");
       return;
     }
+
+    setIsSaving(true);
 
     const { error } = await supabase
       .from("records")
@@ -92,6 +100,16 @@ export default function EditPage() {
 
     router.push("/");
   };
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse">
+          読み込み中...
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-100 p-6">
@@ -216,9 +234,10 @@ export default function EditPage() {
 
           <button
             onClick={updateRecord}
-            className="w-full rounded-lg bg-blue-600 p-3 text-white"
+            disabled={isSaving}
+            className="w-full rounded-lg bg-blue-600 p-3 text-white disabled:opacity-50"
           >
-            更新する
+            {isSaving ? "更新中..." : "更新する"}
           </button>
 
         </div>
