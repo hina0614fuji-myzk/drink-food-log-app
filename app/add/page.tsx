@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function AddPage() {
+    
     const today = new Date().toISOString().split("T")[0];
 
     const [date, setDate] = useState(today);
@@ -14,7 +16,7 @@ export default function AddPage() {
     const router = useRouter();
     const [isSaving, setIsSaving] = useState(false);
 
-    const saveRecord = () => {
+    const saveRecord = async () => {
 
         if (!meal.trim()) {
             alert("食事を入力してください");
@@ -23,28 +25,26 @@ export default function AddPage() {
 
         setIsSaving(true);
 
-        const newRecord = {
-            id: Date.now(),
-            date,
-            meal,
-            alcohol,
-            memo,
-        };
+        const { error } = await supabase
+            .from("records")
+            .insert([
+                {
+                    date,
+                    meal,
+                    alcohol,
+                    memo,
+                },
+            ]);
 
-        const savedRecords = JSON.parse(
-            localStorage.getItem("records") || "[]"
-        );
-
-        savedRecords.unshift(newRecord);
-
-        localStorage.setItem(
-            "records",
-            JSON.stringify(savedRecords)
-        );
+        if (error) {
+            alert("保存失敗: " + error.message);
+            return;
+        }
 
         alert("保存しました！");
 
         router.push("/");
+
     };
 
     return (

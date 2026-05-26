@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -18,49 +19,53 @@ export default function EditPage() {
 
   const id = Number(params.id);
 
-  const [records, setRecords] = useState<FoodRecord[]>([]);
-
   const [date, setDate] = useState("");
   const [meal, setMeal] = useState("");
   const [alcohol, setAlcohol] = useState("");
   const [memo, setMemo] = useState("");
 
   useEffect(() => {
-    const savedRecords: FoodRecord[] = JSON.parse(
-      localStorage.getItem("records") || "[]"
-    );
+    const fetchRecord = async () => {
+      const { data, error } = await supabase
+        .from("records")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-    setRecords(savedRecords);
+      if (error) {
+        alert("データ取得失敗: " + error.message);
+        return;
+      }
 
-    const record = savedRecords.find(
-      (record) => record.id === id
-    );
+      setDate(data.date);
+      setMeal(data.meal);
+      setAlcohol(data.alcohol);
+      setMemo(data.memo);
+    };
 
-    if (record) {
-      setDate(record.date);
-      setMeal(record.meal);
-      setAlcohol(record.alcohol);
-      setMemo(record.memo);
-    }
+    fetchRecord();
   }, [id]);
 
-  const updateRecord = () => {
-    const updatedRecords = records.map((item) =>
-      item.id === id
-        ? {
-          ...item,
-          date,
-          meal,
-          alcohol,
-          memo,
-        }
-        : item
-    );
+  const updateRecord = async () => {
+    if (!meal.trim()) {
+      alert("食事を入力してください");
+      return;
+    }
 
-    localStorage.setItem(
-      "records",
-      JSON.stringify(updatedRecords)
-    );
+    const { error } = await supabase
+      .from("records")
+      .update({
+        date,
+        meal,
+        alcohol,
+        memo,
+      })
+      .eq("id", id);
+
+    if (error) {
+      alert("更新失敗: " + error.message);
+      return;
+    }
 
     alert("更新しました！");
 

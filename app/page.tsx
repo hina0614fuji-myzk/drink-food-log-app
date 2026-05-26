@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
 type FoodRecord = {
@@ -15,24 +16,40 @@ export default function Home() {
   const [records, setRecords] = useState<FoodRecord[]>([]);
 
   useEffect(() => {
-    const savedRecords = localStorage.getItem("records");
+    const fetchRecords = async () => {
+      const { data, error } = await supabase
+        .from("records")
+        .select("*")
+        .order("id", { ascending: false });
 
-    if (savedRecords) {
-      setRecords(JSON.parse(savedRecords));
-    }
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setRecords(data);
+    };
+
+    fetchRecords();
   }, []);
 
-  const deleteRecord = (id: number) => {
+  const deleteRecord = async (id: number) => {
+    const { error } = await supabase
+      .from("records")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("削除失敗: " + error.message);
+      return;
+    }
+
     const updatedRecords = records.filter(
       (record) => record.id !== id
     );
 
     setRecords(updatedRecords);
-
-    localStorage.setItem(
-      "records",
-      JSON.stringify(updatedRecords)
-    );
+    
   };
 
   return (
