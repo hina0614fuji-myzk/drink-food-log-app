@@ -8,8 +8,12 @@ type FoodRecord = {
   id: number;
   date: string;
   meal: string;
-  alcohol: string;
   memo: string;
+  has_alcohol: boolean;
+  alcohol_type: string | null;
+  alcohol_amount: number | null;
+  alcohol_unit: string | null;
+  alcohol_note: string | null;
 };
 
 export default function Home() {
@@ -49,7 +53,7 @@ export default function Home() {
     );
 
     setRecords(updatedRecords);
-    
+
   };
 
   return (
@@ -87,9 +91,11 @@ export default function Home() {
 
                 <p>
                   <span className="font-semibold">🍺 お酒：</span>
-                  {record.alcohol}
+                  {record.has_alcohol
+                    ? `${record.alcohol_type} ${record.alcohol_amount}${record.alcohol_unit}`
+                    : "なし"}
                 </p>
-
+                
                 <p>
                   <span className="font-semibold">📝 メモ：</span>
                   {record.memo}
