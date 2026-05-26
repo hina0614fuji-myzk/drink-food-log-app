@@ -83,17 +83,27 @@ export default function Home() {
     <main className="min-h-screen bg-red-50 px-4 py-6">
       <div className="mx-auto max-w-2xl">
         {/* ヘッダー */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center  sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-3xl font-bold">
             🍚 夜ごはん・お酒記録
           </h1>
 
-          <Link
-            href="/add"
-            className="rounded-xl bg-orange-500 px-3 py-2 text-white shadow hover:bg-orange-600"
-          >
-            + 記録追加
-          </Link>
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              href="/calendar"
+              className="rounded-xl bg-sky-500 px-3 py-2 text-white shadow hover:bg-sky-600"
+            >
+              📅 カレンダー
+            </Link>
+
+            <Link
+              href="/add"
+              className="rounded-xl bg-orange-500 px-3 py-2 text-white shadow hover:bg-orange-600"
+            >
+              + 記録追加
+            </Link>
+          </div>
+
         </div>
 
         {/* サマリ */}
