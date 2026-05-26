@@ -80,38 +80,48 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
+    <main className="min-h-screen bg-red-50 px-4 py-6">
       <div className="mx-auto max-w-2xl">
         {/* ヘッダー */}
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold">
-            🍺 夜ごはん・お酒記録
+            🍚 夜ごはん・お酒記録
           </h1>
 
           <Link
             href="/add"
-            className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700">
+            className="rounded-xl bg-orange-500 px-3 py-2 text-white shadow hover:bg-orange-600"
+          >
             + 記録追加
           </Link>
         </div>
 
         {/* サマリ */}
-        <div className="mb-6 grid grid-cols-3 gap-3">
-          <div className="rounded-xl bg-white p-4 text-center shadow">
-            <p className="text-sm text-gray-500">記録数</p>
-            <p className="mt-1 text-2xl font-bold">{totalCount}</p>
+
+        {isLoading ? (
+
+          <div className="mb-6 grid grid-cols-3 gap-3">
           </div>
 
-          <div className="rounded-xl bg-white p-4 text-center shadow">
-            <p className="text-sm text-gray-500">飲酒日数</p>
-            <p className="mt-1 text-2xl font-bold">{alcoholCount}</p>
-          </div>
+        ) :
 
-          <div className="rounded-xl bg-white p-4 text-center shadow">
-            <p className="text-sm text-gray-500">禁酒日数</p>
-            <p className="mt-1 text-2xl font-bold">{noAlcoholCount}</p>
+          <div className="mb-6 grid grid-cols-3 gap-3">
+            <div className="rounded-xl bg-white p-4 text-center shadow">
+              <p className="text-sm text-gray-500">記録数</p>
+              <p className="mt-1 text-2xl font-bold">{totalCount}</p>
+            </div>
+
+            <div className="rounded-xl bg-white p-4 text-center shadow">
+              <p className="text-sm text-gray-500">飲酒日数</p>
+              <p className="mt-1 text-2xl font-bold">{alcoholCount}</p>
+            </div>
+
+            <div className="rounded-xl bg-white p-4 text-center shadow">
+              <p className="text-sm text-gray-500">禁酒日数</p>
+              <p className="mt-1 text-2xl font-bold">{noAlcoholCount}</p>
+            </div>
           </div>
-        </div>
+        }
 
         {/* 記録一覧を表示する */}
         <div className="space-y-4">
@@ -151,15 +161,17 @@ export default function Home() {
 
           ) : (
 
-            // 既存のカード
+            // カード表示
             records.map((record) => (
               <div
                 key={record.id}
                 className="rounded-xl bg-white p-5 shadow-md"
               >
-                <p className="mb-2 text-sm text-gray-500">
-                  {record.date}
-                </p>
+                <div className="flex justify-end">
+                  <p className="text-sm text-gray-500">
+                    {record.date}
+                  </p>
+                </div>
 
                 <div className="space-y-1">
                   <p>
@@ -184,14 +196,14 @@ export default function Home() {
 
                   <Link
                     href={`/edit/${record.id}`}
-                    className="rounded-lg bg-yellow-500 px-3 py-2 text-sm text-white hover:bg-yellow-600"
+                    className="rounded-xl bg-yellow-500 px-3 py-2 text-white shadow hover:bg-yellow-600"
                   >
                     編集
                   </Link>
 
                   <button
                     onClick={() => deleteRecord(record.id)}
-                    className="rounded-lg bg-red-500 px-3 py-2 text-sm text-white hover:bg-red-600"
+                    className="rounded-xl bg-red-500 px-3 py-2 text-white shadow hover:bg-red-600"
                   >
                     削除
                   </button>
